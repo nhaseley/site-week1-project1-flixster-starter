@@ -72,13 +72,15 @@ let fakeMoviesAPI = {
     "total_pages": 98,
     "total_results": 1951
 }  
-
+// let responseHERE;
 function getResponse(){
     fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&api_key=28152e8bb4f19448c4ceb9613f74ffb0')
     .then(response => {return response.json()})
     .then(response => {
-        console.log(response)
-        return response
+        // console.log(response.results)
+        // responseHERE = response;
+        return response 
+        
     })
 }
 function generateOneCard(movieObject){
@@ -134,11 +136,13 @@ function generateOneCard(movieObject){
 function generateCards(moviesObject){
   
     // for every movie, do this:
-    let all_movies = moviesObject?.results; // added question mark
+console.log(moviesObject);
+    let all_movies = moviesObject.results; // added question mark
+    // console.log(all_movies);
     let allMoviesContainer = document.createElement("div");
     allMoviesContainer.classList.add("allMoviesContainerClass");
+    all_movies.forEach((newMovie) => { // added question mark
 
-    all_movies?.forEach((newMovie) => { // added question mark
 
         // generateOneCard(newMovie)
         console.log("about to call generateOne card")
@@ -168,4 +172,7 @@ function generateCards(moviesObject){
 
 generateCards(fakeMoviesAPI);
 
+
+// getResponse();
+// console.log(getResponse().results);
 // generateCards(getResponse());
