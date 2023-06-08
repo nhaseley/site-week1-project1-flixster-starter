@@ -71,56 +71,18 @@ let fakeMoviesAPI = {
     ],
     "total_pages": 98,
     "total_results": 1951
+}  
+
+function getResponse(){
+    fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&api_key=28152e8bb4f19448c4ceb9613f74ffb0')
+    .then(response => {return response.json()})
+    .then(response => {
+        console.log(response)
+        return response
+    })
 }
-
-// const options = {
-//     method: 'GET',
-//     headers: {
-//       accept: 'application/json',
-//       Authorization: "RXqwRIzTKNCuE32A6fSJFG4kiYoob3hv"
-//     }
-//   };
-  
-
-// fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
-// .then(response => {return response.json()})
-// .then(response => {
-//     // console.log(response)
-//     return response
-// })
-// .then(console.log("hi")) // fix?
-
-
-// Global Constants
-const apiKey = "RXqwRIzTKNCuE32A6fSJFG4kiYoob3hv"
-
-const GIPHY_API_BASE_URL = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`
-
-const createMoviesEndpointUrl = () =>
-  `${GIPHY_API_BASE_URL}?api_key=${apiKey}`
-
-/**
- * Make the actual `fetch` request to the Movies API
- * and appropriately handle the response.
- *
- * 
- *
- */
-async function getMoviesApiResults() {
-    // YOUR CODE HERE
-    const response = await fetch(createMoviesEndpointUrl()) // await bc async function
-    const jsonResponse = await response.json() // await bc async function
-    console.log(jsonResponse.data)
-    return jsonResponse.data // async function
-}
-
-
-// let firstMovie = fakeMoviesAPI.results[0]
-// console.log(fakeMoviesAPI.results[0])
-
-
 function generateOneCard(movieObject){
-  
+
     // create star
     let star = document.createElement("span");
     star.classList.add("star");
@@ -162,33 +124,36 @@ function generateOneCard(movieObject){
     movie.appendChild(movieImage);
     movie.appendChild(averageContainer);
     movie.appendChild(movieTitle);
-    document.body.appendChild(movie);
+    return movie;
+    // document.body.appendChild(movie);
+
+
+   
 }
 
 function generateCards(moviesObject){
   
     // for every movie, do this:
+    let all_movies = moviesObject?.results; // added question mark
+    let allMoviesContainer = document.createElement("div");
+    allMoviesContainer.classList.add("allMoviesContainerClass");
 
-    // const movieObject = fakeMoviesAPI;
-    movies = moviesObject.results;
-    movies.forEach((movie) => {
-        generateOneCard(movie)
+    all_movies?.forEach((newMovie) => { // added question mark
+
+        // generateOneCard(newMovie)
+        console.log("about to call generateOne card")
+        allMoviesContainer.appendChild(generateOneCard(newMovie));
+        document.body.appendChild(allMoviesContainer);
+ 
     })
+
 
     const button = document.createElement("BUTTON");
     button.innerHTML = "Load More";
     document.body.appendChild(button);
 
     button.addEventListener("click", () => {
-        // fetch(`/wp-json/blog-posts/all-posts`)
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        //     // NEXT JS CODE WILL GO HERE
-        //   })
-        //   .catch((err) => {
-        //     console.log("Something went wrong!", err);
-        //   });
-        generateCards(moviesObject) // generate the same thing?
+        generateCards(moviesObject) // generate the same thing? change to generate more things
       });
     
 }
@@ -201,7 +166,6 @@ function generateCards(moviesObject){
   document.body.appendChild(pageTitle);
 
 
-// generateOneCard(fakeMoviesAPI.results[0]);
 generateCards(fakeMoviesAPI);
 
-// document.body.addEventListener("click", handleShowMore)
+// generateCards(getResponse());

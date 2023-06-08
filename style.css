@@ -10,6 +10,12 @@
 /* .body{
     background-color: yellow;
 } */
+.allMoviesContainerClass{
+    /* display:grid; */
+    display:flex;
+    flex-wrap: wrap;
+
+}
 
 .movieClass {
     /* display: flex; */
@@ -20,7 +26,9 @@
     /* text-align:center;    */
     /* display: grid; */
 }
-.body{
-    display: grid;
-}
+
+/* 
+    make a new container for all the movies to be held in and make that have display:grid
+
+} */
 
