@@ -1,78 +1,3 @@
-// let fakeMoviesAPI = {
-//     "dates": {
-//         "maximum": "2023-06-05",
-//         "minimum": "2023-04-18"
-//     },
-//     "page": 1,
-//     "results": [
-//         {
-//             "adult": false,
-//             "backdrop_path": "/9n2tJBplPbgR2ca05hS5CKXwP2c.jpg",
-//             "genre_ids": [
-//                 16,
-//                 10751,
-//                 12,
-//                 14,
-//                 35
-//             ],
-//             "id": 502356,
-//             "original_language": "en",
-//             "original_title": "The Super Mario Bros. Movie",
-//             "overview": "While working underground to fix a water main, Brooklyn plumbers—and brothers—Mario and Luigi are transported down a mysterious pipe and wander into a magical new world. But when the brothers are separated, Mario embarks on an epic quest to find Luigi.",
-//             "popularity": 3392.2,
-//             "poster_path": "/qNBAXBIQlnOThrVvA6mA2B5ggV6.jpg",
-//             "release_date": "2023-04-05",
-//             "title": "The Super Mario Bros. Movie",
-//             "video": false,
-//             "vote_average": 7.8,
-//             "vote_count": 4327
-//         },
-//         {
-//             "adult": false,
-//             "backdrop_path": "/2I5eBh98Q4aPq8WdQrHdTC8ARhY.jpg",
-//             "genre_ids": [
-//                 28,
-//                 12,
-//                 16,
-//                 878
-//             ],
-//             "id": 569094,
-//             "original_language": "en",
-//             "original_title": "Spider-Man: Across the Spider-Verse",
-//             "overview": "After reuniting with Gwen Stacy, Brooklyn’s full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse, where he encounters the Spider Society, a team of Spider-People charged with protecting the Multiverse’s very existence. But when the heroes clash on how to handle a new threat, Miles finds himself pitted against the other Spiders and must set out on his own to save those he loves most.",
-//             "popularity": 2921.844,
-//             "poster_path": "/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
-//             "release_date": "2023-05-31",
-//             "title": "Spider-Man: Across the Spider-Verse",
-//             "video": false,
-//             "vote_average": 8.8,
-//             "vote_count": 739
-//         },
-//         {
-//             "adult": false,
-//             "backdrop_path": "/4t0oBFrJyweYPt0hocW6RUa0b6H.jpg",
-//             "genre_ids": [
-//                 28,
-//                 80,
-//                 53
-//             ],
-//             "id": 385687,
-//             "original_language": "en",
-//             "original_title": "Fast X",
-//             "overview": "Over many missions and against impossible odds, Dom Toretto and his family have outsmarted, out-nerved and outdriven every foe in their path. Now, they confront the most lethal opponent they've ever faced: A terrifying threat emerging from the shadows of the past who's fueled by blood revenge, and who is determined to shatter this family and destroy everything—and everyone—that Dom loves, forever.",
-//             "popularity": 2334.66,
-//             "poster_path": "/1E5baAaEse26fej7uHcjOgEE2t2.jpg",
-//             "release_date": "2023-05-17",
-//             "title": "Fast X",
-//             "video": false,
-//             "vote_average": 7.1,
-//             "vote_count": 854
-//         },
-//     ],
-//     "total_pages": 98,
-//     "total_results": 1951
-// } 
-
 // Global Constants
 const ORIGINAL_MOVIES_API_BASE_URL = "https://api.themoviedb.org/3/movie/now_playing?language=en-US";
 const MOVIES_API_BASE_URL = "https://api.themoviedb.org/3/search/movie?"
@@ -96,21 +21,21 @@ const state = {
 TODO:
 - FIX 404 ERROR MESSAGE
 - MORE ACCESSIBILITY FEATURES
-- CLOSE-SEARCH-BTN
 - WALKTHROUGH VID
 - REFLECTION QUESTIONS
 
 - FIX MOVIE DETAILS BUTTON --> POPUP?
 - MOVIE TRAILERS PREVIEW?
 - DEPLOY USING GITHUB PAGES
-
+- GENERATE IMAGES AS YOU TYPE INSTEAD OF PRESSING BUTTON?
+- DROPDOWN FEATURE AS WE TYPE
 */
 
 
 const searchForm = document.createElement("form");
 searchForm.id = "search-form";
 searchForm.classList.add("search-form");
-searchForm.innerHTML = "Enter your search here: ";
+searchForm.innerHTML = "Enter your search here:    ";
 document.body.appendChild(searchForm);
 
 
@@ -127,14 +52,6 @@ searchButton.classList.add("search-button");
 searchButton.innerHTML = "Generate Search";
 searchForm.appendChild(searchButton);
 
-
-const closeSearchButton = document.createElement("BUTTON");
-// searchButton.value = "Search";
-closeSearchButton.id = "close-search-btn";
-closeSearchButton.classList.add("close-search-btn");
-closeSearchButton.innerHTML = "Close Search";
-document.body.appendChild(closeSearchButton);
-
  // create pageTitle
  let pageTitle = document.createElement("span");
  pageTitle.classList.add("title");
@@ -145,6 +62,17 @@ document.body.appendChild(closeSearchButton);
 
  let allMoviesContainer = document.createElement("div");
  allMoviesContainer.classList.add("movies-grid");
+ 
+ const closeSearchButton = document.createElement("BUTTON");
+// searchButton.value = "Search";
+closeSearchButton.id = "close-search-btn";
+closeSearchButton.classList.add("close-search-btn");
+closeSearchButton.innerHTML = "Close Search";
+
+const showMoreButton = document.createElement("BUTTON");
+showMoreButton.id = "load-more-movies-btn";
+showMoreButton.classList.add("load-more-movies-btn");
+showMoreButton.innerHTML = "Load More!";
 
 
  /**
@@ -154,12 +82,20 @@ document.body.appendChild(closeSearchButton);
  *
  */
  async function handleCloseForm(event){
-    console.log("closing??");
+    // console.log("closing??");
+    console.log(state.searchTerm);
+
     state.searchTerm = "";
     console.log(state.searchTerm);
-    state.originalRender == 1;
+    state.originalRender = 1;
     // state.searchTerm = "";
+    // closeSearchButton.innerHTML = "".
     const results = await getResponse(state.searchTerm);
+    // remove load more button
+    showMoreButton.style.display = "none";
+    closeSearchButton.style.display = "none";
+    // showMoreButton.classList?.remove?.("hidden");
+
  }
 
 
@@ -170,10 +106,8 @@ document.body.appendChild(closeSearchButton);
  *
  */
 async function handleFormSubmit(event) {
-    // YOUR CODE HERE
-    // if (state.searchTerm == ""){
-    //     handleCloseForm(event);
-    // }
+   
+    document.body.appendChild(closeSearchButton);
     event.preventDefault()
     // disables the default handling of the form submission event, which will cause the page to reload
     
@@ -184,15 +118,14 @@ async function handleFormSubmit(event) {
     
     allMoviesContainer.innerHTML = "";
 
-
     const results = await getResponse(state.searchTerm);
     // displayResults(results) /// fix
     searchInput.id = "searchInput";
     // searchInput.ariaLabel = "hello"; // for accessibility
     searchInput.value = "";
-    
+
+    document.body.appendChild(showMoreButton); // should be at bottom - TODO: fix
     showMoreButton.classList?.remove?.("hidden");
-  
   }
 // searchButton.addEventListener("submit", handleFormSubmit);
 
@@ -222,10 +155,14 @@ function getResponse(searchTerm){
         linkToFetch = originalCreateMovieEndpointUrl(state.pageID);
         console.log(linkToFetch);
         console.log("link looks good!");
+
     } else {
         linkToFetch = createMovieEndpointUrl(searchTerm, state.pageID);
+        console.log(linkToFetch);
     }
+    allMoviesContainer.innerHTML = ""; // remove previous results
 
+    console.log("about to regenerate")
     // fetch(createMovieEndpointUrl(searchTerm, state.pageID))
     fetch(linkToFetch)
     .then(response => {return response.json()})
@@ -296,8 +233,15 @@ function generateOneCard(movieObject){
     let movieImage = document.createElement("img");
     movieImage.classList.add("movie-poster");
     // console.log(movieObject.poster_path);
+    // TODO: ERROR CHECK FOR NONEXISTENT PATHS?
+
     movieImage.src = "https://image.tmdb.org/t/p/w342" + movieObject.poster_path;
     // document.body.insertBefore(image, averageContainer);
+
+    let movieDescription = document.createElement("div");
+    movieDescription.classList.add("movie-description");
+    movieDescription.innerText = movieImage.overview;
+    // TODO: POPUP FOR EVERY MOVIE
 
     // create title
     let movieTitle = document.createElement("div");
@@ -323,17 +267,8 @@ function generateOneCard(movieObject){
    
 }
 
-
-// generateCards(fakeMoviesAPI);
-
-getResponse(state.searchTerm); // move to onload?
+getResponse(state.searchTerm);
 state.originalRender=0;
-const showMoreButton = document.createElement("BUTTON");
-showMoreButton.id = "load-more-movies-btn";
-showMoreButton.classList.add("load-more-movies-btn");
-showMoreButton.innerHTML = "Load More!";
-document.body.appendChild(showMoreButton); // should be at bottom - fix
-
 
 window.onload = function () {
     closeSearchButton.addEventListener("click", handleCloseForm);

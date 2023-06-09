@@ -25,7 +25,14 @@ html{
     justify-content: space-around;
 
 }
+.movie-poster{
+    transition-duration: 0.4s
 
+}
+.movie-poster:hover{
+    border-radius: 20%;
+
+}
 .movie-card {
     /* display: flex; */
     /* flex-direction: row; */
@@ -49,6 +56,8 @@ html{
     background-color: pink;
     display: flex;
     align-items: flex-end;
+    /* text-align: center; */
+    justify-content: center;
 }
 
 .load-more-movies-btn{
@@ -56,10 +65,21 @@ html{
     color: white;
     /* text-align: center;
     How to center button? */
-    /* margin-left: auto;
-    margin-right: auto; */
+    margin: 0 auto;
+    /* margin-right: au */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center; */
+    /* align-items: center; */
     
+}
+
+.search-button{
+    background-color: white;
+    color: black;
+}
+.close-search-btn{
+    background-color: white;
+    color: black;
+    display: flex;
+    margin: 0 auto;
 }
