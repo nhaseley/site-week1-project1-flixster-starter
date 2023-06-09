@@ -19,7 +19,7 @@ Deployed Application (optional): [Flixster Deployed Site](ADD_LINK_HERE)
   - Title - the element should have a class of `movie-title`
   - Image - the `img` element should have a class of `movie-poster`
   - Votes - the element should have a class of `movie-votes`
-- [ ] User can load more current movies by clicking a button at the bottom of the list
+- [x] User can load more current movies by clicking a button at the bottom of the list
   - The button should have an id of `load-more-movies-btn`.
   - When clicked, the page should not refresh.
   - New movies should simply be added to the bottom
@@ -39,6 +39,7 @@ Deployed Application (optional): [Flixster Deployed Site](ADD_LINK_HERE)
 - [ ] Improve the user experience through CSS & animation.
 - [ ] Allow movie video trailers to be played using [embedded YouTube](https://support.google.com/youtube/answer/171780?hl=en)
 - [ ] Implement anything else that you can get done to improve the app functionality!
+- * New movies are not added to the bottom, but to the page entirely (Movies from previous searches are wiped)
 
 ### Walkthrough Video
 

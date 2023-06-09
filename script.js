@@ -94,7 +94,7 @@ const state = {
 }
 /*
 TODO:
-- FIX SEARCH BUTTON
+- FIX 404 ERROR MESSAGE
 - MORE ACCESSIBILITY FEATURES
 - CLOSE-SEARCH-BTN
 - WALKTHROUGH VID
@@ -105,7 +105,6 @@ TODO:
 - DEPLOY USING GITHUB PAGES
 
 */
-
 
 
 const searchForm = document.createElement("form");
@@ -121,13 +120,20 @@ searchInput.innerHTML = "Search Here!!";
 // state.searchTerm = searchInput.value;
 searchForm.appendChild(searchInput);
 
-
 const searchButton = document.createElement("BUTTON");
 // searchButton.value = "Search";
 searchButton.id = "search-button";
 searchButton.classList.add("search-button");
 searchButton.innerHTML = "Generate Search";
 searchForm.appendChild(searchButton);
+
+
+const closeSearchButton = document.createElement("BUTTON");
+// searchButton.value = "Search";
+closeSearchButton.id = "close-search-btn";
+closeSearchButton.classList.add("close-search-btn");
+closeSearchButton.innerHTML = "Close Search";
+document.body.appendChild(closeSearchButton);
 
  // create pageTitle
  let pageTitle = document.createElement("span");
@@ -140,25 +146,22 @@ searchForm.appendChild(searchButton);
  let allMoviesContainer = document.createElement("div");
  allMoviesContainer.classList.add("movies-grid");
 
-// console.log(searchInput);
-// console.log(searchInput.value);
 
-// /**
-//  * Make the actual `fetch` request to the Movie API
-//  * and appropriately handle the response.
-//  *
-//  * @param {String} searchTerm - The user input text used as the search query
-//  *
-//  */
-// async function getMovieApiResults(searchTerm) {
-//     // YOUR CODE HERE
-//     const response = await fetch(createMovieEndpointUrl(searchTerm, limit)) // await bc async function
-//     const jsonResponse = await response.json() // await bc async function
-//     console.log(jsonResponse);
-//     return jsonResponse;
-//     // console.log(jsonResponse.data)
-//     // return jsonResponse.data // async function
-//   }
+ /**
+ * The function responsible for handling all close form submission events.
+ *
+ * @param {SubmitEvent} event - The SubmitEvent triggered when submitting the form
+ *
+ */
+ async function handleCloseForm(event){
+    console.log("closing??");
+    state.searchTerm = "";
+    console.log(state.searchTerm);
+    state.originalRender == 1;
+    // state.searchTerm = "";
+    const results = await getResponse(state.searchTerm);
+ }
+
 
 /**
  * The function responsible for handling all form submission events.
@@ -167,19 +170,16 @@ searchForm.appendChild(searchButton);
  *
  */
 async function handleFormSubmit(event) {
-    // console.log("submission corrrect??") // failed
     // YOUR CODE HERE
-   
-  
+    // if (state.searchTerm == ""){
+    //     handleCloseForm(event);
+    // }
     event.preventDefault()
     // disables the default handling of the form submission event, which will cause the page to reload
     
     // reset results display section
-    // state.pageID = 1;
-    console.log("REACHED FORM SUBMIT");
+    // console.log("REACHED FORM SUBMIT");
     state.searchTerm = searchInput.value;
-    // console.log(state.searchTerm);
-    // console.log(searchInput.value);
     // const results = await getMovieApiResults(state.searchTerm) // await bc async function
     
     allMoviesContainer.innerHTML = "";
@@ -190,23 +190,10 @@ async function handleFormSubmit(event) {
     searchInput.id = "searchInput";
     // searchInput.ariaLabel = "hello"; // for accessibility
     searchInput.value = "";
-    console.log(searchInput.value);
-    console.log(state.searchTerm);
     
     showMoreButton.classList?.remove?.("hidden");
   
   }
-
-
-// console.log(createMovieEndpointUrl(searchTerm, limit));
-//searchInput.value = "";
-
-
-// searchButton.addEventListener("click", () => {
-//     console.log("testing the button press"); // need to change
-//     // generateCards(moviesObject) // generate the same thing? change to generate more things
-//   });
-
 // searchButton.addEventListener("submit", handleFormSubmit);
 
 /**
@@ -219,19 +206,22 @@ async function handleFormSubmit(event) {
 async function handleShowMore(event) {
     // YOUR CODE HERE
     // const results = await getMovieApiResults(state.searchTerm) // await bc async function
+    allMoviesContainer.innerHTML = ""; // remove previous results
     state.pageID += 1;
     console.log(state.pageID);
+   
     const results = await getResponse(state.searchTerm);
     // displayResults(results)
-
   }
   
 function getResponse(searchTerm){    
     // const searchTerm = searchInput.value;
-    console.log(searchTerm);
+    // console.log(searchTerm);
     // console.log(state.pageID);
     if (state.originalRender == 1){
         linkToFetch = originalCreateMovieEndpointUrl(state.pageID);
+        console.log(linkToFetch);
+        console.log("link looks good!");
     } else {
         linkToFetch = createMovieEndpointUrl(searchTerm, state.pageID);
     }
@@ -241,7 +231,7 @@ function getResponse(searchTerm){
     .then(response => {return response.json()})
     .then(response => {
         // console.log(response)
-        console.log(response.results);
+        // console.log(response.results);
         // responseHERE = response;
         let all_movies = response.results;
 
@@ -346,7 +336,7 @@ document.body.appendChild(showMoreButton); // should be at bottom - fix
 
 
 window.onload = function () {
-    
+    closeSearchButton.addEventListener("click", handleCloseForm);
     searchForm.addEventListener("submit", handleFormSubmit);
     // console.log(searchForm) 
     showMoreButton.addEventListener("click", handleShowMore);
