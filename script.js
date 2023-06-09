@@ -77,8 +77,36 @@ function getResponse(){
     fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&api_key=28152e8bb4f19448c4ceb9613f74ffb0')
     .then(response => {return response.json()})
     .then(response => {
+        // console.log(response)
         // console.log(response.results)
         // responseHERE = response;
+        let all_movies = response.results; // added question mark
+
+        let allMoviesContainer = document.createElement("div");
+        allMoviesContainer.classList.add("movies-grid");
+        all_movies.forEach((newMovie) => { // added question mark
+    
+    
+            // generateOneCard(newMovie)
+            // console.log("about to call generateOne card")
+            allMoviesContainer.appendChild(generateOneCard(newMovie));
+            document.body.appendChild(allMoviesContainer);
+     
+        })
+    
+    
+        const button = document.createElement("BUTTON");
+        button.id = "load-more-movies-btn";
+        button.innerHTML = "Load More";
+        document.body.appendChild(button);
+    
+        button.addEventListener("click", () => {
+            console.log("hi"); // need to change
+            // generateCards(moviesObject) // generate the same thing? change to generate more things
+          });
+
+
+
         return response 
         
     })
@@ -88,7 +116,7 @@ function generateOneCard(movieObject){
     // create star
     let star = document.createElement("span");
     star.classList.add("star");
-    let starContent = document.createTextNode("⭐");
+    let starContent = document.createTextNode("⭐ ");
     star.appendChild(starContent);
     // document.body.appendChild(star);
 
@@ -96,7 +124,7 @@ function generateOneCard(movieObject){
     let rating = document.createElement("span");
     let ratingContent = document.createTextNode(movieObject.vote_average);
     // console.log(movieObject.vote_average);
-    rating.classList.add("rating");
+    rating.classList.add("movie-votes");
     rating.appendChild(ratingContent);
     // document.body.appendChild(rating);
 
@@ -111,56 +139,54 @@ function generateOneCard(movieObject){
 
     // create image
     let movieImage = document.createElement("img");
+    movieImage.classList.add("movie-poster");
     // console.log(movieObject.poster_path);
     movieImage.src = "https://image.tmdb.org/t/p/w342" + movieObject.poster_path;
     // document.body.insertBefore(image, averageContainer);
 
     // create title
     let movieTitle = document.createElement("div");
-    movieTitle.classList.add("movieTitle");
+    movieTitle.classList.add("movie-title");
     movieTitle.innerText = movieObject.original_title;
     // document.body.insertBefore(movieTitle, averageContainer);
 
     let movie = document.createElement("section");
-    movie.classList.add("movieClass")
+    movie.classList.add("movie-card")
     movie.appendChild(movieImage);
     movie.appendChild(averageContainer);
     movie.appendChild(movieTitle);
     return movie;
     // document.body.appendChild(movie);
-
-
    
 }
 
-function generateCards(moviesObject){
+// function generateCards(moviesObject){
   
-    // for every movie, do this:
-console.log(moviesObject);
-    let all_movies = moviesObject.results; // added question mark
-    // console.log(all_movies);
-    let allMoviesContainer = document.createElement("div");
-    allMoviesContainer.classList.add("allMoviesContainerClass");
-    all_movies.forEach((newMovie) => { // added question mark
+//     // for every movie, do this:
+// // console.log(moviesObject);
+//     let all_movies = moviesObject.results; // added question mark
+//     // console.log(all_movies);
+//     let allMoviesContainer = document.createElement("div");
+//     allMoviesContainer.classList.add("allMoviesContainerClass");
+//     all_movies.forEach((newMovie) => { // added question mark
 
 
-        // generateOneCard(newMovie)
-        console.log("about to call generateOne card")
-        allMoviesContainer.appendChild(generateOneCard(newMovie));
-        document.body.appendChild(allMoviesContainer);
+//         // generateOneCard(newMovie)
+//         // console.log("about to call generateOne card")
+//         allMoviesContainer.appendChild(generateOneCard(newMovie));
+//         document.body.appendChild(allMoviesContainer);
  
-    })
+//     })
 
 
-    const button = document.createElement("BUTTON");
-    button.innerHTML = "Load More";
-    document.body.appendChild(button);
+    // const button = document.createElement("BUTTON");
+    // button.innerHTML = "Load More";
+    // document.body.appendChild(button);
 
-    button.addEventListener("click", () => {
-        generateCards(moviesObject) // generate the same thing? change to generate more things
-      });
+    // button.addEventListener("click", () => {
+    //     generateCards(moviesObject) // generate the same thing? change to generate more things
+    //   });
     
-}
 
   // create pageTitle
   let pageTitle = document.createElement("span");
@@ -170,9 +196,10 @@ console.log(moviesObject);
   document.body.appendChild(pageTitle);
 
 
-generateCards(fakeMoviesAPI);
+// generateCards(fakeMoviesAPI);
 
-
-// getResponse();
+getResponse();
+// const response1 = getResponse();
+// console.log(response1);
 // console.log(getResponse().results);
 // generateCards(getResponse());

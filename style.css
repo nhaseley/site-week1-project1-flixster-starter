@@ -4,20 +4,22 @@
     text-align: center; 
 }
 
-.movieTitle {
+.movie-title {
     font-weight: bold;
+    /* flex-wrap: wrap; */
+    white-space: normal;
 }
 /* .body{
     background-color: yellow;
 } */
-.allMoviesContainerClass{
+.movies-grid{
     /* display:grid; */
     display:flex;
     flex-wrap: wrap;
 
 }
 
-.movieClass {
+.movie-card {
     /* display: flex; */
     /* flex-direction: row; */
     /* flex-wrap: wrap; */
