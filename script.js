@@ -74,20 +74,23 @@
 // } 
 
 // Global Constants
-const MOVIES_API_BASE_URL = "https://api.themoviedb.org/3/movie/now_playing?language=en-US";
+const ORIGINAL_MOVIES_API_BASE_URL = "https://api.themoviedb.org/3/movie/now_playing?language=en-US";
+const MOVIES_API_BASE_URL = "https://api.themoviedb.org/3/search/movie?"
 
 // const limit = 9;
 const apiKey="28152e8bb4f19448c4ceb9613f74ffb0";
-// const searchInput = document.getElementById("search-input"); // added for search bar
-
 // add page incrementng
-const createMovieEndpointUrl = (searchTerm, pageID) => `${MOVIES_API_BASE_URL}&page=${pageID}&q=${searchTerm}&api_key=${apiKey}`
-// const createMovieEndpointUrl = (searchTerm, pageID) => `${MOVIES_API_BASE_URL}&page=3&q=${searchTerm}&api_key=${apiKey}`
-// html make empty before calling getresponse
-// resets to page 1 if over page limit
+// https://api.themoviedb.org/3/search/movie?query=zz&api_key=28152e8bb4f19448c4ceb9613f74ffb0
+
+// personalized url for user input term
+const createMovieEndpointUrl = (searchTerm, pageID) => `${MOVIES_API_BASE_URL}page=${pageID}&query=${searchTerm}&api_key=${apiKey}`
+
+const originalCreateMovieEndpointUrl = (pageID) => `${ORIGINAL_MOVIES_API_BASE_URL}page=${pageID}&api_key=${apiKey}`
+// resets to page 1 if over page limit - new feature to make page tabs instead of reloading
 const state = {
     searchTerm: "",
-    pageID:1
+    pageID:1,
+    originalRender:1 // boolean for first time loading it
 }
 /*
 TODO:
@@ -102,6 +105,8 @@ TODO:
 - DEPLOY USING GITHUB PAGES
 
 */
+
+
 
 const searchForm = document.createElement("form");
 searchForm.id = "search-form";
@@ -164,7 +169,8 @@ searchForm.appendChild(searchButton);
 async function handleFormSubmit(event) {
     // console.log("submission corrrect??") // failed
     // YOUR CODE HERE
-
+   
+  
     event.preventDefault()
     // disables the default handling of the form submission event, which will cause the page to reload
     
@@ -175,6 +181,10 @@ async function handleFormSubmit(event) {
     // console.log(state.searchTerm);
     // console.log(searchInput.value);
     // const results = await getMovieApiResults(state.searchTerm) // await bc async function
+    
+    allMoviesContainer.innerHTML = "";
+
+
     const results = await getResponse(state.searchTerm);
     // displayResults(results) /// fix
     searchInput.id = "searchInput";
@@ -216,13 +226,18 @@ async function handleShowMore(event) {
 
   }
   
-function getResponse(searchTerm){
-    // fetch(MOVIES_API_BASE_URL)
-
+function getResponse(searchTerm){    
     // const searchTerm = searchInput.value;
     console.log(searchTerm);
     // console.log(state.pageID);
-    fetch(createMovieEndpointUrl(searchTerm, state.pageID))
+    if (state.originalRender == 1){
+        linkToFetch = originalCreateMovieEndpointUrl(state.pageID);
+    } else {
+        linkToFetch = createMovieEndpointUrl(searchTerm, state.pageID);
+    }
+
+    // fetch(createMovieEndpointUrl(searchTerm, state.pageID))
+    fetch(linkToFetch)
     .then(response => {return response.json()})
     .then(response => {
         // console.log(response)
@@ -231,10 +246,16 @@ function getResponse(searchTerm){
         let all_movies = response.results;
 
         // console.log(all_movies);
-
+        // remove everything from movie grid!!
+        // if (allMoviesContainer.hasChildNodes){
+        //     while (allMoviesContainer.hasChildNodes){
+        //         allMoviesContainer.removeChild(allMoviesContainer.firstChild)
+        //     }
+        // }
 
         // for all movies do this
         all_movies.forEach((newMovie) => {    
+
             // console.log("about to call generateOne card")
             allMoviesContainer.appendChild(generateOneCard(newMovie));
             document.body.appendChild(allMoviesContainer);
@@ -316,7 +337,7 @@ function generateOneCard(movieObject){
 // generateCards(fakeMoviesAPI);
 
 getResponse(state.searchTerm); // move to onload?
-
+state.originalRender=0;
 const showMoreButton = document.createElement("BUTTON");
 showMoreButton.id = "load-more-movies-btn";
 showMoreButton.classList.add("load-more-movies-btn");
