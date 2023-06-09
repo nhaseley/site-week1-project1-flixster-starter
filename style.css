@@ -1,21 +1,28 @@
+html{
+    background-color: rgb(204, 70, 70);
+}
+
 .title {
     font-weight: bold;
     font-size: 300%;
+    display: flex;
+    justify-content: center;
     text-align: center; 
 }
 
 .movie-title {
     font-weight: bold;
-    /* flex-wrap: wrap; */
-    white-space: normal;
+    display: flex;
+    flex-wrap: wrap;
 }
 /* .body{
-    background-color: yellow;
+    background-color: purple;
 } */
 .movies-grid{
     /* display:grid; */
     display:flex;
     flex-wrap: wrap;
+    justify-content: space-around;
 
 }
 
@@ -24,13 +31,27 @@
     /* flex-direction: row; */
     /* flex-wrap: wrap; */
     /* justify-content:space-around; */
-    background-color: yellow;
+    background-color: lightyellow;
     /* text-align:center;    */
     /* display: grid; */
 }
 
-/* 
-    make a new container for all the movies to be held in and make that have display:grid
+.movie-button {
+    transition-duration: 0.4s;
+}
+  
+.movie-button:hover { 
+    background-color: #d17c32; 
+    color: black;
+}
 
-} */
+.search-form{
+    background-color: pink;
+    display: flex;
+    align-items: flex-end;
+}
 
+.load-more-movies-btn{
+    background-color: black;
+    color: white;
+}

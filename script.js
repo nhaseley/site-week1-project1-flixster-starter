@@ -71,46 +71,181 @@ let fakeMoviesAPI = {
     ],
     "total_pages": 98,
     "total_results": 1951
-}  
-// let responseHERE;
-function getResponse(){
-    fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1&api_key=28152e8bb4f19448c4ceb9613f74ffb0')
+} 
+
+// Global Constants
+const MOVIES_API_BASE_URL = "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
+const limit = 9;
+const apiKey="28152e8bb4f19448c4ceb9613f74ffb0";
+// const searchInput = document.getElementById("search-input"); // added for search bar
+
+
+const createMovieEndpointUrl = (searchTerm, numResults) => `${MOVIES_API_BASE_URL}?q=${searchTerm}&limit=${numResults}&api_key=${apiKey}`
+
+const state = {
+    searchTerm: "",
+}
+/*
+TODO:
+- FIX NUMBER OF MOVIES ON A PAGE
+- FIX SEARCH BUTTON
+- MORE ACCESSIBILITY FEATURES
+- CLOSE-SEARCH-BTN
+- WALKTHROUGH VID
+- REFLECTION QUESTIONS
+
+- FIX MOVIE DETAILS BUTTON --> POPUP?
+- MOVIE TRAILERS PREVIEW?
+- DEPLOY USING GITHUB PAGES
+
+*/
+
+const searchForm = document.createElement("form");
+searchForm.id = "search-form";
+searchForm.classList.add("search-form");
+searchForm.innerHTML = "Enter your search here: ";
+document.body.appendChild(searchForm);
+
+
+const searchInput = document.createElement("INPUT");
+searchInput.id = "search-input";
+searchInput.innerHTML = "Search Here!!";
+// state.searchTerm = searchInput.value;
+searchForm.appendChild(searchInput);
+
+
+const searchButton = document.createElement("BUTTON");
+// searchButton.value = "Search";
+searchButton.id = "search-button";
+searchButton.innerHTML = "Generate Search";
+searchForm.appendChild(searchButton);
+
+ // create pageTitle
+ let pageTitle = document.createElement("span");
+ pageTitle.classList.add("title");
+ let pageTitleContent = document.createTextNode("🍿 Flixster");
+ pageTitle.appendChild(pageTitleContent);
+ document.body.appendChild(pageTitle);
+
+
+ let allMoviesContainer = document.createElement("div");
+ allMoviesContainer.classList.add("movies-grid");
+
+// console.log(searchInput);
+// console.log(searchInput.value);
+
+// /**
+//  * Make the actual `fetch` request to the Movie API
+//  * and appropriately handle the response.
+//  *
+//  * @param {String} searchTerm - The user input text used as the search query
+//  *
+//  */
+// async function getMovieApiResults(searchTerm) {
+//     // YOUR CODE HERE
+//     const response = await fetch(createMovieEndpointUrl(searchTerm, limit)) // await bc async function
+//     const jsonResponse = await response.json() // await bc async function
+//     console.log(jsonResponse);
+//     return jsonResponse;
+//     // console.log(jsonResponse.data)
+//     // return jsonResponse.data // async function
+//   }
+
+/**
+ * The function responsible for handling all form submission events.
+ *
+ * @param {SubmitEvent} event - The SubmitEvent triggered when submitting the form
+ *
+ */
+async function handleFormSubmit(event) {
+    // console.log("submission corrrect??") // failed
+    // YOUR CODE HERE
+
+
+    
+    
+    event.preventDefault()
+    // disables the default handling of the form submission event, which will cause the page to reload
+    
+    // reset results display section
+    state.searchTerm = searchInput.value;
+    console.log(state.searchTerm);
+    console.log(searchInput.value);
+    // const results = await getMovieApiResults(state.searchTerm) // await bc async function
+    const results = await getResponse(state.searchTerm);
+    // displayResults(results) /// fix
+    searchInput.id = "searchInput";
+    // searchInput.ariaLabel = "hello"; // for accessibility
+    searchInput.value = "";
+    
+    showMoreButton.classList?.remove?.("hidden");
+  
+  }
+
+
+// console.log(createMovieEndpointUrl(searchTerm, limit));
+//searchInput.value = "";
+
+
+// searchButton.addEventListener("click", () => {
+//     console.log("testing the button press"); // need to change
+//     // generateCards(moviesObject) // generate the same thing? change to generate more things
+//   });
+
+// searchButton.addEventListener("submit", handleFormSubmit);
+
+/**
+ * Handle fetching the next set of results from the Giphy API
+ * using the same search term from the previous query.
+ *
+ * @param {MouseEvent} event - The 'click' MouseEvent triggered by clicking the 'Show more' button
+ *
+ */
+async function handleShowMore(event) {
+    // YOUR CODE HERE
+    // const results = await getMovieApiResults(state.searchTerm) // await bc async function
+    const results = await getResponse(state.searchTerm);
+    // displayResults(results)
+  }
+  
+function getResponse(searchTerm){
+    // fetch(MOVIES_API_BASE_URL)
+
+    // const searchTerm = searchInput.value;
+    // console.log(searchTerm);
+    fetch(createMovieEndpointUrl(searchTerm, limit))
     .then(response => {return response.json()})
     .then(response => {
-        // console.log(response)
+        console.log(response)
         // console.log(response.results)
         // responseHERE = response;
-        let all_movies = response.results; // added question mark
+        let all_movies = response.results;
 
-        let allMoviesContainer = document.createElement("div");
-        allMoviesContainer.classList.add("movies-grid");
-        all_movies.forEach((newMovie) => { // added question mark
-    
-    
-            // generateOneCard(newMovie)
+        console.log(all_movies);
+
+
+        // for all movies do this
+        all_movies.forEach((newMovie) => {    
             // console.log("about to call generateOne card")
             allMoviesContainer.appendChild(generateOneCard(newMovie));
             document.body.appendChild(allMoviesContainer);
-     
         })
-    
-    
-        const button = document.createElement("BUTTON");
-        button.id = "load-more-movies-btn";
-        button.innerHTML = "Load More";
-        document.body.appendChild(button);
-    
-        button.addEventListener("click", () => {
-            console.log("hi"); // need to change
-            // generateCards(moviesObject) // generate the same thing? change to generate more things
-          });
+        
+        
+        // showMoreButton.addEventListener("click", handleShowMore);
 
+        // showMoreButton.addEventListener("click", () => {
+            
+        //     console.log("hi"); // need to change
+        //     // generateCards(moviesObject) // generate the same thing? change to generate more things
+        //   });
 
-
-        return response 
+        // return response 
         
     })
 }
+
+
 function generateOneCard(movieObject){
 
     // create star
@@ -128,7 +263,7 @@ function generateOneCard(movieObject){
     rating.appendChild(ratingContent);
     // document.body.appendChild(rating);
 
-    // create average container
+    // create average container (star + rating)
     let averageContainer = document.createElement("div");
     averageContainer.classList.add("average");
     averageContainer.appendChild(star);
@@ -150,56 +285,43 @@ function generateOneCard(movieObject){
     movieTitle.innerText = movieObject.original_title;
     // document.body.insertBefore(movieTitle, averageContainer);
 
+    const movieButton = document.createElement("BUTTON");
+    movieButton.id = "movie-button";
+    movieButton.classList.add("movie-button");
+    movieButton.innerHTML = "Click for movie details!";
+    // document.body.appendChild(movieButton);
+
+
     let movie = document.createElement("section");
     movie.classList.add("movie-card")
     movie.appendChild(movieImage);
     movie.appendChild(averageContainer);
     movie.appendChild(movieTitle);
+    movie.appendChild(movieButton);
     return movie;
     // document.body.appendChild(movie);
    
 }
 
-// function generateCards(moviesObject){
-  
-//     // for every movie, do this:
-// // console.log(moviesObject);
-//     let all_movies = moviesObject.results; // added question mark
-//     // console.log(all_movies);
-//     let allMoviesContainer = document.createElement("div");
-//     allMoviesContainer.classList.add("allMoviesContainerClass");
-//     all_movies.forEach((newMovie) => { // added question mark
-
-
-//         // generateOneCard(newMovie)
-//         // console.log("about to call generateOne card")
-//         allMoviesContainer.appendChild(generateOneCard(newMovie));
-//         document.body.appendChild(allMoviesContainer);
- 
-//     })
-
-
-    // const button = document.createElement("BUTTON");
-    // button.innerHTML = "Load More";
-    // document.body.appendChild(button);
-
-    // button.addEventListener("click", () => {
-    //     generateCards(moviesObject) // generate the same thing? change to generate more things
-    //   });
-    
-
-  // create pageTitle
-  let pageTitle = document.createElement("span");
-  pageTitle.classList.add("title");
-  let pageTitleContent = document.createTextNode("🍿 Flixster");
-  pageTitle.appendChild(pageTitleContent);
-  document.body.appendChild(pageTitle);
-
 
 // generateCards(fakeMoviesAPI);
 
-getResponse();
+getResponse(state.searchTerm);
 // const response1 = getResponse();
 // console.log(response1);
 // console.log(getResponse().results);
 // generateCards(getResponse());
+
+const showMoreButton = document.createElement("BUTTON");
+showMoreButton.id = "load-more-movies-btn";
+showMoreButton.innerHTML = "Load More!";
+showMoreButton.classList.add("load-more-movies-btn")
+document.body.appendChild(showMoreButton); // should be at bottom - fix
+
+
+window.onload = function () {
+    searchButton.addEventListener("submit", handleFormSubmit); // submit not a click?
+    // console.log(searchForm) 
+    showMoreButton.addEventListener("click", handleShowMore);
+    // console.log("hi")
+  }
