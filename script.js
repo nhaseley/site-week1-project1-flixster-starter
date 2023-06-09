@@ -170,6 +170,7 @@ async function handleFormSubmit(event) {
     
     // reset results display section
     // state.pageID = 1;
+    console.log("REACHED FORM SUBMIT");
     state.searchTerm = searchInput.value;
     // console.log(state.searchTerm);
     // console.log(searchInput.value);
@@ -179,6 +180,8 @@ async function handleFormSubmit(event) {
     searchInput.id = "searchInput";
     // searchInput.ariaLabel = "hello"; // for accessibility
     searchInput.value = "";
+    console.log(searchInput.value);
+    console.log(state.searchTerm);
     
     showMoreButton.classList?.remove?.("hidden");
   
@@ -207,7 +210,7 @@ async function handleShowMore(event) {
     // YOUR CODE HERE
     // const results = await getMovieApiResults(state.searchTerm) // await bc async function
     state.pageID += 1;
-    console.log(state.pageID)
+    console.log(state.pageID);
     const results = await getResponse(state.searchTerm);
     // displayResults(results)
 
@@ -223,7 +226,7 @@ function getResponse(searchTerm){
     .then(response => {return response.json()})
     .then(response => {
         // console.log(response)
-        // console.log(response.results)
+        console.log(response.results);
         // responseHERE = response;
         let all_movies = response.results;
 
@@ -323,7 +326,7 @@ document.body.appendChild(showMoreButton); // should be at bottom - fix
 
 window.onload = function () {
     
-    searchButton.addEventListener("submit", handleFormSubmit); // submit not a click?
+    searchForm.addEventListener("submit", handleFormSubmit);
     // console.log(searchForm) 
     showMoreButton.addEventListener("click", handleShowMore);
     // console.log("hi")
