@@ -68,8 +68,11 @@ html{
     margin: 0 auto;
     /* margin-right: au */
     display: flex;
+    /* align-self: flex-end; */
     /* justify-content: center; */
     /* align-items: center; */
+    /* bottom: 500px; */
+    /* position: static; */
     
 }
 

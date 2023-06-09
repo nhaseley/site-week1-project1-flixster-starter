@@ -17,6 +17,7 @@ const state = {
     pageID:1,
     originalRender:1 // boolean for first time loading it
 }
+
 /*
 TODO:
 - FIX 404 ERROR MESSAGE
@@ -60,9 +61,12 @@ searchForm.appendChild(searchButton);
  document.body.appendChild(pageTitle);
 
 
- let allMoviesContainer = document.createElement("div");
+//  let allMoviesContainer = document.createElement("div");
+ let allMoviesContainer = document.getElementById("newcontainerformovies");
  allMoviesContainer.classList.add("movies-grid");
- 
+
+ //  allMoviesContainer.classList.add("movies-grid");
+
  const closeSearchButton = document.createElement("BUTTON");
 // searchButton.value = "Search";
 closeSearchButton.id = "close-search-btn";
@@ -72,8 +76,7 @@ closeSearchButton.innerHTML = "Close Search";
 const showMoreButton = document.createElement("BUTTON");
 showMoreButton.id = "load-more-movies-btn";
 showMoreButton.classList.add("load-more-movies-btn");
-showMoreButton.innerHTML = "Load More!";
-document.body.appendChild(showMoreButton);
+showMoreButton.innerHTML = "Next Page";
 
 
  /**
@@ -129,6 +132,7 @@ async function handleFormSubmit(event) {
     searchInput.value = "";
 
     document.body.appendChild(showMoreButton); // should be at bottom - TODO: fix
+    // make a container in htmp and append in javascript
     showMoreButton.classList?.remove?.("hidden");
   }
 // searchButton.addEventListener("submit", handleFormSubmit);
@@ -157,15 +161,11 @@ function getResponse(searchTerm){
     // console.log(state.pageID);
     if (state.originalRender == 1){ // not the original render
         linkToFetch = originalCreateMovieEndpointUrl(state.pageID);
-        console.log(linkToFetch);
-        console.log("link looks good!");
-
     } else {
         linkToFetch = createMovieEndpointUrl(searchTerm, state.pageID);
         console.log(linkToFetch);
     }
     allMoviesContainer.innerHTML = ""; // remove previous results
-
     console.log("about to regenerate")
     // fetch(createMovieEndpointUrl(searchTerm, state.pageID))
     fetch(linkToFetch)
@@ -190,18 +190,8 @@ function getResponse(searchTerm){
             // console.log("about to call generateOne card")
             allMoviesContainer.appendChild(generateOneCard(newMovie));
             document.body.appendChild(allMoviesContainer);
+            console.log("JUST ADDED ALL THE MOVIES");
         })
-        
-        
-        // showMoreButton.addEventListener("click", handleShowMore);
-
-        // showMoreButton.addEventListener("click", () => {
-            
-        //     console.log("hi"); // need to change
-        //     // generateCards(moviesObject) // generate the same thing? change to generate more things
-        //   });
-
-        // return response 
         
     })
 }
@@ -277,12 +267,14 @@ function generateOneCard(movieObject){
 }
 
 getResponse(state.searchTerm);
-// state.originalRender=0;
+document.body.appendChild(showMoreButton);
+console.log("JUST ADDED SHOW MORE BUTTON");
 
 window.onload = function () {
     closeSearchButton.addEventListener("click", handleCloseForm);
     searchForm.addEventListener("submit", handleFormSubmit);
     // console.log(searchForm) 
     showMoreButton.addEventListener("click", handleShowMore);
-    // console.log("hi")
+ 
+// console.log("hi")
   }
