@@ -9,8 +9,8 @@ const apiKey="28152e8bb4f19448c4ceb9613f74ffb0";
 
 // personalized url for user input term
 const createMovieEndpointUrl = (searchTerm, pageID) => `${MOVIES_API_BASE_URL}page=${pageID}&query=${searchTerm}&api_key=${apiKey}`
-
-const originalCreateMovieEndpointUrl = (pageID) => `${ORIGINAL_MOVIES_API_BASE_URL}page=${pageID}&api_key=${apiKey}`
+// https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=3&api_key=28152e8bb4f19448c4ceb9613f74ffb0
+const originalCreateMovieEndpointUrl = (pageID) => `${ORIGINAL_MOVIES_API_BASE_URL}&page=${pageID}&api_key=${apiKey}`
 // resets to page 1 if over page limit - new feature to make page tabs instead of reloading
 const state = {
     searchTerm: "",
@@ -73,6 +73,7 @@ const showMoreButton = document.createElement("BUTTON");
 showMoreButton.id = "load-more-movies-btn";
 showMoreButton.classList.add("load-more-movies-btn");
 showMoreButton.innerHTML = "Load More!";
+document.body.appendChild(showMoreButton);
 
 
  /**
@@ -87,14 +88,14 @@ showMoreButton.innerHTML = "Load More!";
 
     state.searchTerm = "";
     console.log(state.searchTerm);
+    state.pageID = 1
     state.originalRender = 1;
     // state.searchTerm = "";
     // closeSearchButton.innerHTML = "".
     const results = await getResponse(state.searchTerm);
     // remove load more button
-    showMoreButton.style.display = "none";
+    // showMoreButton.style.display = "none";
     closeSearchButton.style.display = "none";
-    // showMoreButton.classList?.remove?.("hidden");
 
  }
 
@@ -106,8 +107,11 @@ showMoreButton.innerHTML = "Load More!";
  *
  */
 async function handleFormSubmit(event) {
-   
+    // closeSearButton.style.display = "block"; // brring cancel button back
+    state.originalRender = 0;
+    state.pageID = 1;
     document.body.appendChild(closeSearchButton);
+    closeSearchButton.style.display = "block";
     event.preventDefault()
     // disables the default handling of the form submission event, which will cause the page to reload
     
@@ -151,7 +155,7 @@ function getResponse(searchTerm){
     // const searchTerm = searchInput.value;
     // console.log(searchTerm);
     // console.log(state.pageID);
-    if (state.originalRender == 1){
+    if (state.originalRender == 1){ // not the original render
         linkToFetch = originalCreateMovieEndpointUrl(state.pageID);
         console.log(linkToFetch);
         console.log("link looks good!");
@@ -231,13 +235,18 @@ function generateOneCard(movieObject){
 
     // create image
     let movieImage = document.createElement("img");
+  
     movieImage.classList.add("movie-poster");
     // console.log(movieObject.poster_path);
     // TODO: ERROR CHECK FOR NONEXISTENT PATHS?
 
-    movieImage.src = "https://image.tmdb.org/t/p/w342" + movieObject.poster_path;
+    if (movieImage.poster_path != ""){ // poster is available on api
+        movieImage.src = "https://image.tmdb.org/t/p/w342" + movieObject.poster_path;
     // document.body.insertBefore(image, averageContainer);
-
+    } else {
+        // make it a blank page
+        movieImage.src = "/download.jpeg";
+    }
     let movieDescription = document.createElement("div");
     movieDescription.classList.add("movie-description");
     movieDescription.innerText = movieImage.overview;
@@ -268,7 +277,7 @@ function generateOneCard(movieObject){
 }
 
 getResponse(state.searchTerm);
-state.originalRender=0;
+// state.originalRender=0;
 
 window.onload = function () {
     closeSearchButton.addEventListener("click", handleCloseForm);
