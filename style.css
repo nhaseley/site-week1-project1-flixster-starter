@@ -48,16 +48,26 @@ html{
 }
   
 .movie-button:hover { 
-    background-color: #d17c32; 
+    background-color: rgb(239, 221, 120); 
     color: black;
 }
 
 .search-form{
     background-color: pink;
     display: flex;
-    align-items: flex-end;
+    /* align-items: flex-end; */
     /* text-align: center; */
     justify-content: center;
+}
+
+.toggle-pages{
+    display: flex;
+    /* margin: 0 auto; */
+     /* margin: 0 auto; */
+    background-color:rgb(239, 221, 120);
+    /* align-items: flex-end; */
+    justify-content: center;
+
 }
 
 .load-more-movies-btn{
@@ -65,7 +75,7 @@ html{
     color: white;
     /* text-align: center;
     How to center button? */
-    margin: 0 auto;
+    margin:1 auto;
     /* margin-right: au */
     display: flex;
     /* align-self: flex-end; */

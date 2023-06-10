@@ -73,13 +73,25 @@ closeSearchButton.id = "close-search-btn";
 closeSearchButton.classList.add("close-search-btn");
 closeSearchButton.innerHTML = "Close Search";
 
+
+const togglePagesContainer = document.createElement("div");
+togglePagesContainer.id = "toggle-pages";
+togglePagesContainer.classList.add("toggle-pages");
+togglePagesContainer.innerHTML = "Toggle through pages here:    ";
+
 const showMoreButton = document.createElement("BUTTON");
 showMoreButton.id = "load-more-movies-btn";
 showMoreButton.classList.add("load-more-movies-btn");
-showMoreButton.innerHTML = "Next Page";
+showMoreButton.innerHTML = "Next Page >> ";
 
-
- /**
+const previousPageButton = document.createElement("BUTTON");
+previousPageButton.id = "load-more-movies-btn";
+previousPageButton.classList.add("load-more-movies-btn");
+previousPageButton.innerHTML = "<< Previous Page";
+togglePagesContainer.appendChild(previousPageButton);
+togglePagesContainer.appendChild(showMoreButton);
+document.body.appendChild(togglePagesContainer);
+/**
  * The function responsible for handling all close form submission events.
  *
  * @param {SubmitEvent} event - The SubmitEvent triggered when submitting the form
@@ -131,11 +143,29 @@ async function handleFormSubmit(event) {
     // searchInput.ariaLabel = "hello"; // for accessibility
     searchInput.value = "";
 
-    document.body.appendChild(showMoreButton); // should be at bottom - TODO: fix
+    // document.body.appendChild(showMoreButton); // should be at bottom - TODO: fix
+
+    // document.body.appendChild(previousPageButton); // should be at bottom - TODO: fix
     // make a container in htmp and append in javascript
     showMoreButton.classList?.remove?.("hidden");
+    previousPageButton.classList?.remove?.("hidden");
   }
 // searchButton.addEventListener("submit", handleFormSubmit);
+
+
+/**
+ * Handle fetching the previous set of results from the Giphy API
+ * using the same search term from the previous query.
+ *
+ * @param {MouseEvent} event - The 'click' MouseEvent triggered by clicking the 'Show more' button
+ *
+ */
+async function handleShowPrevious(event){
+        allMoviesContainer.innerHTML = ""; // remove previous results
+        state.pageID -= 1;
+        console.log(state.pageID);
+        const results = await getResponse(state.searchTerm);
+}
 
 /**
  * Handle fetching the next set of results from the Giphy API
@@ -267,7 +297,6 @@ function generateOneCard(movieObject){
 }
 
 getResponse(state.searchTerm);
-document.body.appendChild(showMoreButton);
 console.log("JUST ADDED SHOW MORE BUTTON");
 
 window.onload = function () {
@@ -275,6 +304,8 @@ window.onload = function () {
     searchForm.addEventListener("submit", handleFormSubmit);
     // console.log(searchForm) 
     showMoreButton.addEventListener("click", handleShowMore);
- 
+
+    previousPageButton.addEventListener("click", handleShowPrevious);
+
 // console.log("hi")
   }
