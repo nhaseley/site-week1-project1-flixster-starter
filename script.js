@@ -15,23 +15,28 @@ const originalCreateMovieEndpointUrl = (pageID) => `${ORIGINAL_MOVIES_API_BASE_U
 const state = {
     searchTerm: "",
     pageID:1,
-    originalRender:1 // boolean for first time loading it
+    originalRender:1, // boolean for first time loading it
+    popup:""
 }
 
 /*
 TODO:
-- FIX 404 ERROR MESSAGE
-- MORE ACCESSIBILITY FEATURES
 - WALKTHROUGH VID
 - REFLECTION QUESTIONS
 
-- FIX MOVIE DETAILS BUTTON --> POPUP?
-- MOVIE TRAILERS PREVIEW?
-- DEPLOY USING GITHUB PAGES
+Extra features:
+- MOVIE DETAILS BUTTON --> POPUP?
+- DEPLOY USING GITHUB PAGES?
 - GENERATE IMAGES AS YOU TYPE INSTEAD OF PRESSING BUTTON?
-- DROPDOWN FEATURE AS WE TYPE
+- DROPDOWN FEATURE AS WE TYPE?
 */
 
+ // create pageTitle
+ let pageTitle = document.createElement("span");
+ pageTitle.classList.add("title");
+ let pageTitleContent = document.createTextNode("🍿 Flixster");
+ pageTitle.appendChild(pageTitleContent);
+ document.body.appendChild(pageTitle);
 
 const searchForm = document.createElement("form");
 searchForm.id = "search-form";
@@ -39,11 +44,12 @@ searchForm.classList.add("search-form");
 searchForm.innerHTML = "Enter your search here:    ";
 document.body.appendChild(searchForm);
 
-
 const searchInput = document.createElement("INPUT");
 searchInput.id = "search-input";
 searchInput.innerHTML = "Search Here!!";
 // state.searchTerm = searchInput.value;
+const searchDropdown = document.createElement("emoji-picker");
+searchForm.appendChild(searchDropdown);
 searchForm.appendChild(searchInput);
 
 const searchButton = document.createElement("BUTTON");
@@ -53,26 +59,15 @@ searchButton.classList.add("search-button");
 searchButton.innerHTML = "Generate Search";
 searchForm.appendChild(searchButton);
 
- // create pageTitle
- let pageTitle = document.createElement("span");
- pageTitle.classList.add("title");
- let pageTitleContent = document.createTextNode("🍿 Flixster");
- pageTitle.appendChild(pageTitleContent);
- document.body.appendChild(pageTitle);
-
-
 //  let allMoviesContainer = document.createElement("div");
  let allMoviesContainer = document.getElementById("newcontainerformovies");
  allMoviesContainer.classList.add("movies-grid");
-
- //  allMoviesContainer.classList.add("movies-grid");
 
  const closeSearchButton = document.createElement("BUTTON");
 // searchButton.value = "Search";
 closeSearchButton.id = "close-search-btn";
 closeSearchButton.classList.add("close-search-btn");
 closeSearchButton.innerHTML = "Close Search";
-
 
 const togglePagesContainer = document.createElement("div");
 togglePagesContainer.id = "toggle-pages";
@@ -91,6 +86,14 @@ previousPageButton.innerHTML = "<< Previous Page";
 togglePagesContainer.appendChild(previousPageButton);
 togglePagesContainer.appendChild(showMoreButton);
 document.body.appendChild(togglePagesContainer);
+ 
+// create subtitle
+ let pageSubtitle = document.createElement("span");
+ pageSubtitle.classList.add("subtitle");
+ let pageSubtitleContent = document.createTextNode("Now Playing...");
+ pageSubtitle.appendChild(pageSubtitleContent);
+ document.body.appendChild(pageSubtitle);
+
 /**
  * The function responsible for handling all close form submission events.
  *
@@ -111,7 +114,6 @@ document.body.appendChild(togglePagesContainer);
     // remove load more button
     // showMoreButton.style.display = "none";
     closeSearchButton.style.display = "none";
-
  }
 
 
@@ -196,7 +198,6 @@ function getResponse(searchTerm){
         console.log(linkToFetch);
     }
     allMoviesContainer.innerHTML = ""; // remove previous results
-    console.log("about to regenerate")
     // fetch(createMovieEndpointUrl(searchTerm, state.pageID))
     fetch(linkToFetch)
     .then(response => {return response.json()})
@@ -220,7 +221,6 @@ function getResponse(searchTerm){
             // console.log("about to call generateOne card")
             allMoviesContainer.appendChild(generateOneCard(newMovie));
             document.body.appendChild(allMoviesContainer);
-            console.log("JUST ADDED ALL THE MOVIES");
         })
         
     })
@@ -258,8 +258,6 @@ function generateOneCard(movieObject){
   
     movieImage.classList.add("movie-poster");
     // console.log(movieObject.poster_path);
-    // TODO: ERROR CHECK FOR NONEXISTENT PATHS?
-
     if (movieImage.poster_path != ""){ // poster is available on api
         movieImage.src = "https://image.tmdb.org/t/p/w342" + movieObject.poster_path;
     // document.body.insertBefore(image, averageContainer);
@@ -267,10 +265,12 @@ function generateOneCard(movieObject){
         // make it a blank page
         movieImage.src = "/download.jpeg";
     }
-    let movieDescription = document.createElement("div");
-    movieDescription.classList.add("movie-description");
-    movieDescription.innerText = movieImage.overview;
+    // let movieDescription = document.createElement("div");
+    // movieDescription.classList.add("movie-description");
+    // movieDescription.innerText = movieImage.overview;
+    state.popup = movieImage.overview;
     // TODO: POPUP FOR EVERY MOVIE
+    
 
     // create title
     let movieTitle = document.createElement("div");
@@ -284,28 +284,62 @@ function generateOneCard(movieObject){
     movieButton.innerHTML = "Click for movie details!";
     // document.body.appendChild(movieButton);
 
-
     let movie = document.createElement("section");
     movie.classList.add("movie-card")
     movie.appendChild(movieImage);
     movie.appendChild(averageContainer);
     movie.appendChild(movieTitle);
     movie.appendChild(movieButton);
+    movieButton.addEventListener("click", function(){
+        popupContainer.style.display = "flex";
+
+        const openPopupButton = document.createElement("BUTTON");
+        openPopupButton.id = "movie-button";
+        openPopupButton.addEventListener("click", function(){
+            popupContainer.style.display = "flex";
+        });
+        const closePopupButton = document.getElementById("closePopup");
+        // closePopupButton.id = "closePopup";
+        // closePopupButton.classList.add("closepopup");
+        // closePopupButton.innerHTML = "Open this!";
+        closePopupButton.addEventListener("click", function(){
+            popupContainer.style.display = "none";
+        });
+    });
     return movie;
     // document.body.appendChild(movie);
    
 }
+// function generatePopUp(){
+//     var popup = document.getElementById("popUpElement");
+//     popup.classList.toggle("show");
+//     console.log("hi popup");
+
+// }
+
+function generatePopUp() {
+    var popup = document.getElementById("popUpElement");
+    popup.classList.toggle("show");
+    }
+
 
 getResponse(state.searchTerm);
-console.log("JUST ADDED SHOW MORE BUTTON");
 
 window.onload = function () {
+    popupContainer.style.display = "none";
     closeSearchButton.addEventListener("click", handleCloseForm);
     searchForm.addEventListener("submit", handleFormSubmit);
     // console.log(searchForm) 
     showMoreButton.addEventListener("click", handleShowMore);
 
     previousPageButton.addEventListener("click", handleShowPrevious);
+    // movieButton.addEventListener("click", function(){
+    //     console.log("opened popp");
+    //     popupContainer.style.display = "flex";
+    // });
+    // closePopupButton.addEventListener("click", function(){
+    //     popupContainer.style.display = "none";
 
+    // });
 // console.log("hi")
   }

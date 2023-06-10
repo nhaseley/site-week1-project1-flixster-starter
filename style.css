@@ -3,11 +3,16 @@ html{
 }
 
 .title {
+    font-family: "Lucida Console";
     font-weight: bold;
     font-size: 300%;
     display: flex;
     justify-content: center;
     text-align: center; 
+}
+.subtitle{
+    font-size: 200%;
+
 }
 
 .movie-title {
@@ -43,6 +48,10 @@ html{
     /* display: grid; */
 }
 
+#popupContainer{
+    background-color: white;
+}
+
 .movie-button {
     transition-duration: 0.4s;
 }
@@ -68,6 +77,55 @@ html{
     /* align-items: flex-end; */
     justify-content: center;
 
+}
+
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    }
+    /* The actual popup */
+    .popup .popuptext {
+    visibility: hidden;
+    width: 162px;
+    background-color: lightyellow;;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    padding: 7px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: -325%;
+    left: 43%;
+    margin-left: -80px;
+    }
+    /* Popup arrow */
+    .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    margin-left: 6px;
+    border-width: 5.5px;
+    border-style: solid;
+    border-color: lightyellow transparent transparent transparent;
+    }
+    /* Toggle this class - hide and show the popup */
+    .popup .show {
+    visibility: visible;
+    }
+
+.test{
+    display: flex;
+    justify-content: center;
+}
+.test2{
+    display: flex;
+    justify-content: center;
 }
 
 .load-more-movies-btn{
