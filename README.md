@@ -50,9 +50,9 @@ Other features I added:
 
 `TODO://` Add the embedded URL code to your animated app walkthrough below, `ADD_EMBEDDED_CODE_HERE`. Make sure the video or gif actually renders and animates when viewing this README. (🚫 Remove this paragraph after adding walkthrough video)
 
-<a href="https://www.loom.com/share/da02a07306ee4c8eafe94996c2e46920">
-<!--     <p>Private Video - Watch Video</p> -->
-    <img style="max-width:300px;" src="https://cdn.loom.com/placeholders/private-video.gif">
+<a href="https://www.loom.com/share/145f32c2519f4fb6b4080db08ba77cf3">
+<!--     <p>Library | Loom - 10 June 2023 - Watch Video</p> -->
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/145f32c2519f4fb6b4080db08ba77cf3-with-play.gif">
   </a>
 
 ### Reflection
