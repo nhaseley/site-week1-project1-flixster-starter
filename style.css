@@ -1,5 +1,5 @@
 html{
-    background-color: rgb(204, 70, 70);
+    background-color: rgb(243, 143, 143);
 }
 
 .title {
@@ -44,6 +44,9 @@ html{
     /* flex-wrap: wrap; */
     /* justify-content:space-around; */
     background-color: lightyellow;
+    outline-color: rgb(98, 92, 203);
+    outline-style: inset;
+    outline-width: 100;
     /* text-align:center;    */
     /* display: grid; */
 }
@@ -141,9 +144,11 @@ html{
     /* align-items: center; */
     /* bottom: 500px; */
     /* position: static; */
-    
 }
 
+/* .movieClass{
+    outline-color: white;
+} */
 .search-button{
     background-color: white;
     color: black;
