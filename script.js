@@ -20,10 +20,6 @@ const state = {
 }
 
 /*
-TODO:
-- WALKTHROUGH VID
-- REFLECTION QUESTIONS
-
 Extra features:
 - MOVIE DETAILS BUTTON --> POPUP?
 - DEPLOY USING GITHUB PAGES?
@@ -101,7 +97,6 @@ document.body.appendChild(togglePagesContainer);
  *
  */
  async function handleCloseForm(event){
-    // console.log("closing??");
     console.log(state.searchTerm);
 
     state.searchTerm = "";
@@ -203,17 +198,9 @@ function getResponse(searchTerm){
     .then(response => {return response.json()})
     .then(response => {
         // console.log(response)
-        // console.log(response.results);
+        console.log(response.results);
         // responseHERE = response;
         let all_movies = response.results;
-
-        // console.log(all_movies);
-        // remove everything from movie grid!!
-        // if (allMoviesContainer.hasChildNodes){
-        //     while (allMoviesContainer.hasChildNodes){
-        //         allMoviesContainer.removeChild(allMoviesContainer.firstChild)
-        //     }
-        // }
 
         // for all movies do this
         all_movies.forEach((newMovie) => {    
@@ -255,7 +242,8 @@ function generateOneCard(movieObject){
 
     // create image
     let movieImage = document.createElement("img");
-  
+    movieImage.id = "movie-id";
+   
     movieImage.classList.add("movie-poster");
     // console.log(movieObject.poster_path);
     if (movieImage.poster_path != ""){ // poster is available on api
@@ -269,6 +257,9 @@ function generateOneCard(movieObject){
     // movieDescription.classList.add("movie-description");
     // movieDescription.innerText = movieImage.overview;
     state.popup = movieImage.overview;
+    // <div>
+    //     state.popup;
+    // </div>
     // TODO: POPUP FOR EVERY MOVIE
     
 
@@ -278,10 +269,10 @@ function generateOneCard(movieObject){
     movieTitle.innerText = movieObject.original_title;
     // document.body.insertBefore(movieTitle, averageContainer);
 
-    const movieButton = document.createElement("BUTTON");
-    movieButton.id = "movie-button";
-    movieButton.classList.add("movie-button");
-    movieButton.innerHTML = "Click for movie details!";
+    const openPopupButton = document.createElement("BUTTON");
+    openPopupButton.id = "movie-button";
+    openPopupButton.classList.add("movie-button");
+    openPopupButton.innerHTML = "Click for movie details!";
     // document.body.appendChild(movieButton);
 
     let movie = document.createElement("section");
@@ -289,20 +280,15 @@ function generateOneCard(movieObject){
     movie.appendChild(movieImage);
     movie.appendChild(averageContainer);
     movie.appendChild(movieTitle);
-    movie.appendChild(movieButton);
-    movieButton.addEventListener("click", function(){
+    movie.appendChild(openPopupButton);
+    openPopupButton.addEventListener("click", function(){
         popupContainer.style.display = "flex";
+        window.scrollTo(0, 0); // bring you top of the page
+        // console.log("popup opened!");
 
-        const openPopupButton = document.createElement("BUTTON");
-        openPopupButton.id = "movie-button";
-        openPopupButton.addEventListener("click", function(){
-            popupContainer.style.display = "flex";
-        });
         const closePopupButton = document.getElementById("closePopup");
-        // closePopupButton.id = "closePopup";
-        // closePopupButton.classList.add("closepopup");
-        // closePopupButton.innerHTML = "Open this!";
         closePopupButton.addEventListener("click", function(){
+            console.log("popup closed");
             popupContainer.style.display = "none";
         });
     });
@@ -320,7 +306,8 @@ function generateOneCard(movieObject){
 function generatePopUp() {
     var popup = document.getElementById("popUpElement");
     popup.classList.toggle("show");
-    }
+
+}
 
 
 getResponse(state.searchTerm);
@@ -342,4 +329,6 @@ window.onload = function () {
 
     // });
 // console.log("hi")
+
   }
+  

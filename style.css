@@ -30,6 +30,9 @@ html{
     justify-content: space-around;
 
 }
+/* #popup{
+
+} */
 .movie-poster{
     transition-duration: 0.4s
 
@@ -90,6 +93,7 @@ html{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    outline-offset: 15px;
     }
     /* The actual popup */
     .popup .popuptext {
